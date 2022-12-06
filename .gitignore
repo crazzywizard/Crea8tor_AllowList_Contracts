@@ -8,6 +8,6 @@ typechain
 .env
 .pkey
 scripts/gen.json
-.env.*
+.env
 dist/
 .idea
