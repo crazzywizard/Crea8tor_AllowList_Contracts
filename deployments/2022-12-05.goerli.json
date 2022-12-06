@@ -1,0 +1,76 @@
+{
+  "dropContract": {
+    "deployed": {
+      "deploy": {
+        "deployer": "0xc59b4E5E6311e2e6dAF21A8C16C6A6d56220EC8e",
+        "deployedTo": "0x159186b66E3481f2CDB20bb93db9F5642f81eD74",
+        "transactionHash": "0x8f6aef3ae7f7161e61bfb0b82b5a75bc6a026061ec0a407a30d9aeba09558590"
+      },
+      "contractName": "ERC721Drop",
+      "contractPath": "src/ERC721Drop.sol",
+      "args": [
+        "0x909e9efE4D87d1a6018C2065aE642b6D0447bc91"
+      ]
+    },
+    "verify": {
+      "verify": "Start verifying contract `0x159186b66e3481f2cdb20bb93db9f5642f81ed74` deployed on mumbai\n\nSubmitting verification for [src/ERC721Drop.sol:ERC721Drop] \"0x159186b66E3481f2CDB20bb93db9F5642f81eD74\".\n\nSubmitting verification for [src/ERC721Drop.sol:ERC721Drop] \"0x159186b66E3481f2CDB20bb93db9F5642f81eD74\".\nSubmitted contract for verification:\n\tResponse: `OK`\n\tGUID: `2gciiqyhklhrhp5qqkihewgp15vnsvsrcf5b23znhzgdjt9pfs`\n\tURL:\n        https://mumbai.polygonscan.com/address/0x159186b66e3481f2cdb20bb93db9f5642f81ed74\n",
+      "contractName": "ERC721Drop",
+      "contractPath": "src/ERC721Drop.sol"
+    }
+  },
+  "dropMetadataContract": {
+    "deployed": {
+      "deploy": {
+        "deployer": "0xc59b4E5E6311e2e6dAF21A8C16C6A6d56220EC8e",
+        "deployedTo": "0xea2b571250a09694b7560Fb535904082d00dFED7",
+        "transactionHash": "0xac18249109f92f396c2497d51445cd648a667b1cc8975584e4d2cd8e1697e52c"
+      },
+      "contractName": "DropMetadataRenderer",
+      "contractPath": "src/metadata/DropMetadataRenderer.sol",
+      "args": []
+    },
+    "verify": {
+      "verify": "Start verifying contract `0xea2b571250a09694b7560fb535904082d00dfed7` deployed on mumbai\n\nSubmitting verification for [src/metadata/DropMetadataRenderer.sol:DropMetadataRenderer] \"0xea2b571250a09694b7560Fb535904082d00dFED7\".\n\nSubmitting verification for [src/metadata/DropMetadataRenderer.sol:DropMetadataRenderer] \"0xea2b571250a09694b7560Fb535904082d00dFED7\".\nSubmitted contract for verification:\n\tResponse: `OK`\n\tGUID: `ex4bwywgkuqxikimthqiey6ksjcsb3wqieuqux5cemx4bek13y`\n\tURL:\n        https://mumbai.polygonscan.com/address/0xea2b571250a09694b7560fb535904082d00dfed7\n",
+      "contractName": "DropMetadataRenderer",
+      "contractPath": "src/metadata/DropMetadataRenderer.sol"
+    }
+  },
+  "allowlistMetadataContract": {
+    "deployed": {
+      "deploy": {
+        "deployer": "0xc59b4E5E6311e2e6dAF21A8C16C6A6d56220EC8e",
+        "deployedTo": "0x1b0a908db2F910325E06BD46eCb5ebb020ffEb41",
+        "transactionHash": "0xbb7e60b2284d17db89a7c6ce7a25c239d4354622863099f56afa7e3baa4d2528"
+      },
+      "contractName": "AllowListMetadataRenderer",
+      "contractPath": "src/metadata/AllowListMetadataRenderer.sol",
+      "args": []
+    },
+    "verify": {
+      "verify": "Start verifying contract `0x1b0a908db2f910325e06bd46ecb5ebb020ffeb41` deployed on mumbai\n\nSubmitting verification for [src/metadata/AllowListMetadataRenderer.sol:AllowListMetadataRenderer] \"0x1b0a908db2F910325E06BD46eCb5ebb020ffEb41\".\n\nSubmitting verification for [src/metadata/AllowListMetadataRenderer.sol:AllowListMetadataRenderer] \"0x1b0a908db2F910325E06BD46eCb5ebb020ffEb41\".\n\nSubmitting verification for [src/metadata/AllowListMetadataRenderer.sol:AllowListMetadataRenderer] \"0x1b0a908db2F910325E06BD46eCb5ebb020ffEb41\".\nSubmitted contract for verification:\n\tResponse: `OK`\n\tGUID: `521cm6rjjknwfhyzefqtswdduh13jdqbp4yuq6rpzkdjfjgqv2`\n\tURL:\n        https://mumbai.polygonscan.com/address/0x1b0a908db2f910325e06bd46ecb5ebb020ffeb41\n",
+      "contractName": "AllowListMetadataRenderer",
+      "contractPath": "src/metadata/AllowListMetadataRenderer.sol"
+    }
+  },
+  "creatorImpl": {
+    "deployed": {
+      "deploy": {
+        "deployer": "0xc59b4E5E6311e2e6dAF21A8C16C6A6d56220EC8e",
+        "deployedTo": "0xA28070C33747Ec3b7B8831356cEC38aC04EDa6Db",
+        "transactionHash": "0xd7cc9ae8177f65da7a2fee24a996bfe40af48d756e2acad1875619bd270ca7a9"
+      },
+      "contractName": "ZoraNFTCreatorV1",
+      "contractPath": "src/ZoraNFTCreatorV1.sol",
+      "args": [
+        "0x159186b66E3481f2CDB20bb93db9F5642f81eD74",
+        "0xea2b571250a09694b7560Fb535904082d00dFED7",
+        "0x1b0a908db2F910325E06BD46eCb5ebb020ffEb41"
+      ]
+    },
+    "verify": {
+      "verify": "Start verifying contract `0xa28070c33747ec3b7b8831356cec38ac04eda6db` deployed on mumbai\n\nSubmitting verification for [src/ZoraNFTCreatorV1.sol:ZoraNFTCreatorV1] \"0xA28070C33747Ec3b7B8831356cEC38aC04EDa6Db\".\n\nSubmitting verification for [src/ZoraNFTCreatorV1.sol:ZoraNFTCreatorV1] \"0xA28070C33747Ec3b7B8831356cEC38aC04EDa6Db\".\n\nSubmitting verification for [src/ZoraNFTCreatorV1.sol:ZoraNFTCreatorV1] \"0xA28070C33747Ec3b7B8831356cEC38aC04EDa6Db\".\n\nSubmitting verification for [src/ZoraNFTCreatorV1.sol:ZoraNFTCreatorV1] \"0xA28070C33747Ec3b7B8831356cEC38aC04EDa6Db\".\nSubmitted contract for verification:\n\tResponse: `OK`\n\tGUID: `d58sigs9fyq6qpuurhhdjres8hbtiincmu6x4fqysh1qsrbatp`\n\tURL:\n        https://mumbai.polygonscan.com/address/0xa28070c33747ec3b7b8831356cec38ac04eda6db\n",
+      "contractName": "ZoraNFTCreatorV1",
+      "contractPath": "src/ZoraNFTCreatorV1.sol"
+    }
+  }
+}
