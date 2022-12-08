@@ -166,10 +166,8 @@ contract AllowListMetadataRenderer is
             maxSupply = 0;
         }
         string memory formResponse = tokenFormResponses[target][tokenId];
-        string memory _newDescirption = string.concat(
-            info.description,
-            " : ",
-            formResponse
+        string memory _newDescirption = string(
+            abi.encodePacked(info.description, ":", formResponse)
         );
         return
             NFTMetadataRenderer.createMetadataEdition({

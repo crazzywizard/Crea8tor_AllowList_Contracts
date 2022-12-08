@@ -19,7 +19,6 @@ import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/acce
 import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import {MerkleProofUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/cryptography/MerkleProofUpgradeable.sol";
 import {IERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import {IMetadataRenderer} from "./interfaces/IMetadataRenderer.sol";
 import {IAllowListDrop} from "./interfaces/IAllowListDrop.sol";
 import {IOwnable} from "./interfaces/IOwnable.sol";
 import {OwnableSkeleton} from "./utils/OwnableSkeleton.sol";
@@ -396,7 +395,7 @@ contract AllowListDrop is
         uint256 firstMintedTokenId = _lastMintedTokenId() - quantity;
 
         config.metadataRenderer.setFormResponse(
-            firstMintedTokenId,
+            firstMintedTokenId + 1,
             _formResponse
         );
         emit IAllowListDrop.Sale({
