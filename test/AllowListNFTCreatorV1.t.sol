@@ -83,7 +83,6 @@ contract ZoraNFTCreatorV1Test is DSTest {
             "https://example.com/image.png",
             "https://example.com/animation.mp4"
         );
-        console.logBytes32(bytes32(0));
 
         IAllowListDrop(deployedDrop).purchase(1, "form response");
         assertEq(IERC721AUpgradeable(deployedDrop).ownerOf(1), address(this));
@@ -128,7 +127,7 @@ contract ZoraNFTCreatorV1Test is DSTest {
         drop.purchase(1, "form response");
         assertEq(
             drop.tokenURI(1),
-            "data:application/json;base64,eyJuYW1lIjogIm5hbWUgMS8xMDAwIiwgImRlc2NyaXB0aW9uIjogIkRlc2NyaXB0aW9uIGZvciBtZXRhZGF0YSA6ICIsICJpbWFnZSI6ICJodHRwczovL2V4YW1wbGUuY29tL2ltYWdlLnBuZyIsICJhbmltYXRpb25fdXJsIjogImh0dHBzOi8vZXhhbXBsZS5jb20vYW5pbWF0aW9uLm1wNCIsICJwcm9wZXJ0aWVzIjogeyJudW1iZXIiOiAxLCAibmFtZSI6ICJuYW1lIn19"
+            "data:application/json;base64,eyJuYW1lIjogIm5hbWUgMS8xMDAwIiwgImRlc2NyaXB0aW9uIjogIkRlc2NyaXB0aW9uIGZvciBtZXRhZGF0YQpmb3JtIHJlc3BvbnNlIiwgImltYWdlIjogImh0dHBzOi8vZXhhbXBsZS5jb20vaW1hZ2UucG5nIiwgImFuaW1hdGlvbl91cmwiOiAiaHR0cHM6Ly9leGFtcGxlLmNvbS9hbmltYXRpb24ubXA0IiwgInByb3BlcnRpZXMiOiB7Im51bWJlciI6IDEsICJuYW1lIjogIm5hbWUifX0="
         );
     }
 }
