@@ -61,7 +61,6 @@ contract AllowListDrop is
     /// @dev ZORA V3 transfer helper address for auto-approval
     address internal immutable zoraERC721TransferHelper;
 
-    address internal immutable trustedForwarder;
     /// @notice Max royalty BPS
     uint16 constant MAX_ROYALTY_BPS = 50_00;
 
@@ -144,7 +143,6 @@ contract AllowListDrop is
         ERC2771ContextUpgradeable(_trustedForwarder)
     {
         zoraERC721TransferHelper = _zoraERC721TransferHelper;
-        trustedForwarder = _trustedForwarder;
     }
 
     ///  @dev Create a new drop contract
@@ -399,7 +397,7 @@ contract AllowListDrop is
             }
         } else {
             IERC20Upgradeable(erc20PaymentToken).transferFrom(
-                msg.sender,
+                _msgSender(),
                 fundsRecipient,
                 salePrice * quantity
             );
