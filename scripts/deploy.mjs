@@ -13,17 +13,23 @@ dotenv.config({
 });
 export async function setupAllowListContracts() {
   const zoraERC721TransferHelperAddress = process.env.ZORA_ERC_721_TRANSFER_HELPER_ADDRESS;
+  const trustedForwarderAddress = process.env.TRUSTED_FORWARDER_ADDRESS;
 
   if (!zoraERC721TransferHelperAddress) {
     throw new Error('erc721 transfer helper address is required');
   }
 
+  if (!trustedForwarderAddress) {
+    throw new Error('trusted forwarder address is required');
+  }
   console.log('deploying Erc721Drop');
   const allowListDropContract = await deployAndVerify('src/AllowListDrop.sol:AllowListDrop', [
-    zoraERC721TransferHelperAddress
+    zoraERC721TransferHelperAddress,
+    trustedForwarderAddress
   ]);
   const allowListDropContractAddress = allowListDropContract.deployed.deploy.deployedTo;
   console.log('deployed drop contract to ', allowListDropContractAddress);
+
   console.log('deploying drops metadata');
   const allowListMetadataContract = await deployAndVerify(
     'src/metadata/AllowListMetadataRenderer.sol:AllowListMetadataRenderer',
