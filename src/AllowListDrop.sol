@@ -26,6 +26,7 @@ import {FundsReceiver} from "./utils/FundsReceiver.sol";
 import {Version} from "./utils/Version.sol";
 import {AllowListDropStorageV1} from "./storage/AllowListDropStorageV1.sol";
 import {IAllowListMetadataRenderer} from "./interfaces/IAllowListMetadataRenderer.sol";
+import "@openzeppelin/contracts-upgradeable/metatx/ERC2771ContextUpgradeable.sol";
 
 /**
  * @notice ZORA NFT Base contract for Drops and Editions
@@ -37,6 +38,7 @@ import {IAllowListMetadataRenderer} from "./interfaces/IAllowListMetadataRendere
  */
 contract AllowListDrop is
     ERC721AUpgradeable,
+    ERC2771ContextUpgradeable,
     IERC2981Upgradeable,
     ReentrancyGuardUpgradeable,
     AccessControlUpgradeable,
@@ -59,6 +61,7 @@ contract AllowListDrop is
     /// @dev ZORA V3 transfer helper address for auto-approval
     address internal immutable zoraERC721TransferHelper;
 
+    address internal immutable trustedForwarder;
     /// @notice Max royalty BPS
     uint16 constant MAX_ROYALTY_BPS = 50_00;
 
@@ -136,8 +139,12 @@ contract AllowListDrop is
     /// @notice Global constructor – these variables will not change with further proxy deploys
     /// @dev Marked as an initializer to prevent storage being used of base implementation. Can only be init'd by a proxy.
     /// @param _zoraERC721TransferHelper Transfer helper
-    constructor(address _zoraERC721TransferHelper) initializer {
+    constructor(address _zoraERC721TransferHelper, address _trustedForwarder)
+        initializer
+        ERC2771ContextUpgradeable(_trustedForwarder)
+    {
         zoraERC721TransferHelper = _zoraERC721TransferHelper;
+        trustedForwarder = _trustedForwarder;
     }
 
     ///  @dev Create a new drop contract
@@ -215,6 +222,25 @@ contract AllowListDrop is
     /// @notice User burn function for token id
     function burn(uint256 tokenId) public {
         _burn(tokenId, true);
+    }
+
+    function _msgSender()
+        internal
+        view
+        virtual
+        override(ContextUpgradeable, ERC2771ContextUpgradeable)
+        returns (address sender)
+    {
+        sender = ERC2771ContextUpgradeable._msgSender();
+    }
+
+    function _msgData()
+        internal
+        view
+        override(ContextUpgradeable, ERC2771ContextUpgradeable)
+        returns (bytes calldata)
+    {
+        return ERC2771ContextUpgradeable._msgData();
     }
 
     /// @dev Get royalty information for token
