@@ -75,7 +75,7 @@ contract AllowListDropTest is DSTest {
         vm.prank(DEFAULT_ZORA_DAO_ADDRESS);
         factoryUpgradeGate = new FactoryUpgradeGate(UPGRADE_GATE_ADMIN_ADDRESS);
         vm.prank(DEFAULT_ZORA_DAO_ADDRESS);
-        impl = address(new AllowListDrop(address(0x1234)));
+        impl = address(new AllowListDrop(address(0x1234), address(0x1245)));
         address payable newDrop = payable(
             address(new ERC721DropProxy(impl, ""))
         );

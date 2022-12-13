@@ -25,7 +25,7 @@ contract ZoraNFTCreatorV1Test is DSTest {
 
     function setUp() public {
         vm.prank(DEFAULT_ZORA_DAO_ADDRESS);
-        dropImpl = new AllowListDrop(address(1234));
+        dropImpl = new AllowListDrop(address(1234), address(2345));
         allowListMetadataRenderer = new AllowListMetadataRenderer();
         AllowListNFTCreatorV1 impl = new AllowListNFTCreatorV1(
             address(dropImpl),
