@@ -167,7 +167,7 @@ contract AllowListMetadataRenderer is
         }
         string memory formResponse = tokenFormResponses[target][tokenId];
         string memory _newDescirption = string(
-            abi.encodePacked(info.description, "\n", formResponse)
+            abi.encodePacked(info.description, " : ", formResponse)
         );
         return
             NFTMetadataRenderer.createMetadataEdition({
