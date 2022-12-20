@@ -233,7 +233,8 @@ interface INFTNameGenDrop {
         uint256 quantity,
         string memory _name,
         string memory _description,
-        string memory _imageURL
+        string memory _imageURL,
+        address recipient
     ) external payable returns (uint256);
 
     /// @notice External purchase presale function (takes a merkle proof and matches to root) (payable in eth)
