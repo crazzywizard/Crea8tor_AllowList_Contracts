@@ -2,7 +2,7 @@
 pragma solidity ^0.8.15;
 import {IMetadataRenderer} from "../interfaces/IMetadataRenderer.sol";
 
-interface IAllowListMetadataRenderer is IMetadataRenderer {
+interface INFTNameGenMetadataRenderer is IMetadataRenderer {
     function setTokenInfo(
         uint256,
         string memory,

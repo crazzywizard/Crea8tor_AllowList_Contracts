@@ -19,13 +19,13 @@ import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/acce
 import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import {MerkleProofUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/cryptography/MerkleProofUpgradeable.sol";
 import {IERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import {IAllowListDrop} from "./interfaces/IAllowListDrop.sol";
+import {INFTNameGenDrop} from "./interfaces/INFTNameGenDrop.sol";
 import {IOwnable} from "./interfaces/IOwnable.sol";
 import {OwnableSkeleton} from "./utils/OwnableSkeleton.sol";
 import {FundsReceiver} from "./utils/FundsReceiver.sol";
 import {Version} from "./utils/Version.sol";
-import {AllowListDropStorageV1} from "./storage/AllowListDropStorageV1.sol";
-import {IAllowListMetadataRenderer} from "./interfaces/IAllowListMetadataRenderer.sol";
+import {NFTNameGenDropStorageV1} from "./storage/NFTNameGenDropStorageV1.sol";
+import {INFTNameGenMetadataRenderer} from "./interfaces/INFTNameGenMetadataRenderer.sol";
 import "@openzeppelin/contracts-upgradeable/metatx/ERC2771ContextUpgradeable.sol";
 
 /**
@@ -36,17 +36,17 @@ import "@openzeppelin/contracts-upgradeable/metatx/ERC2771ContextUpgradeable.sol
  * @author iain@zora.co (modified by sw33ts.eth)
  *
  */
-contract AllowListDrop is
+contract NFTNameGenDrop is
     ERC721AUpgradeable,
     ERC2771ContextUpgradeable,
     IERC2981Upgradeable,
     ReentrancyGuardUpgradeable,
     AccessControlUpgradeable,
-    IAllowListDrop,
+    INFTNameGenDrop,
     OwnableSkeleton,
     FundsReceiver,
     Version(8),
-    AllowListDropStorageV1
+    NFTNameGenDropStorageV1
 {
     /// @dev This is the max mint batch size for the optimized ERC721A mint contract
     uint256 internal constant MAX_MINT_BATCH_SIZE = 8;
@@ -182,7 +182,7 @@ contract AllowListDrop is
         uint64 _editionSize,
         uint16 _royaltyBPS,
         ERC20SalesConfiguration memory _salesConfig,
-        IAllowListMetadataRenderer _metadataRenderer,
+        INFTNameGenMetadataRenderer _metadataRenderer,
         bytes memory _metadataRendererInit
     ) public initializer {
         // Setup ERC721A
@@ -259,14 +259,14 @@ contract AllowListDrop is
     }
 
     /// @notice Sale details
-    /// @return IAllowListDrop.SaleDetails sale information details
+    /// @return INFTNameGenDrop.SaleDetails sale information details
     function saleDetails()
         external
         view
-        returns (IAllowListDrop.ERC20SaleDetails memory)
+        returns (INFTNameGenDrop.ERC20SaleDetails memory)
     {
         return
-            IAllowListDrop.ERC20SaleDetails({
+            INFTNameGenDrop.ERC20SaleDetails({
                 erc20PaymentToken: salesConfig.erc20PaymentToken,
                 publicSaleActive: _publicSaleActive(),
                 presaleActive: _presaleActive(),
@@ -288,10 +288,10 @@ contract AllowListDrop is
         external
         view
         override
-        returns (IAllowListDrop.AddressMintDetails memory)
+        returns (INFTNameGenDrop.AddressMintDetails memory)
     {
         return
-            IAllowListDrop.AddressMintDetails({
+            INFTNameGenDrop.AddressMintDetails({
                 presaleMints: presaleMintsByAddress[minter],
                 publicMints: _numberMinted(minter) -
                     presaleMintsByAddress[minter],
@@ -364,7 +364,7 @@ contract AllowListDrop is
     //                       |                             |<---'
     //                       |                             |
     //                       |                             |----.
-    //                       |                             |    | emit IAllowListDrop.Sale()
+    //                       |                             |    | emit INFTNameGenDrop.Sale()
     //                       |                             |<---'
     //                       |                             |
     //                       | return first minted token ID|
@@ -429,7 +429,7 @@ contract AllowListDrop is
             _description,
             _imageURL
         );
-        emit IAllowListDrop.Sale({
+        emit INFTNameGenDrop.Sale({
             to: _msgSender(),
             quantity: quantity,
             pricePerToken: salePrice,
@@ -503,7 +503,7 @@ contract AllowListDrop is
     //                       |                                   |<---'
     //                       |                                   |
     //                       |                                   |----.
-    //                       |                                   |    | emit IAllowListDrop.Sale()
+    //                       |                                   |    | emit INFTNameGenDrop.Sale()
     //                       |                                   |<---'
     //                       |                                   |
     //                       |    return first minted token ID   |
@@ -557,7 +557,7 @@ contract AllowListDrop is
         _mintNFTs(_msgSender(), quantity);
         uint256 firstMintedTokenId = _lastMintedTokenId() - quantity;
 
-        emit IAllowListDrop.Sale({
+        emit INFTNameGenDrop.Sale({
             to: _msgSender(),
             quantity: quantity,
             pricePerToken: pricePerToken,
@@ -741,7 +741,7 @@ contract AllowListDrop is
     /// @param newRenderer new renderer address to use
     /// @param setupRenderer data to setup new renderer with
     function setMetadataRenderer(
-        IAllowListMetadataRenderer newRenderer,
+        INFTNameGenMetadataRenderer newRenderer,
         bytes memory setupRenderer
     ) external onlyAdmin {
         config.metadataRenderer = newRenderer;
@@ -997,7 +997,7 @@ contract AllowListDrop is
     function owner()
         public
         view
-        override(OwnableSkeleton, IAllowListDrop)
+        override(OwnableSkeleton, INFTNameGenDrop)
         returns (address)
     {
         return super.owner();
@@ -1013,9 +1013,9 @@ contract AllowListDrop is
     function metadataRenderer()
         external
         view
-        returns (IAllowListMetadataRenderer)
+        returns (INFTNameGenMetadataRenderer)
     {
-        return IAllowListMetadataRenderer(config.metadataRenderer);
+        return INFTNameGenMetadataRenderer(config.metadataRenderer);
     }
 
     /// @notice Token URI Getter, proxies to metadataRenderer
@@ -1050,6 +1050,6 @@ contract AllowListDrop is
             super.supportsInterface(interfaceId) ||
             type(IOwnable).interfaceId == interfaceId ||
             type(IERC2981Upgradeable).interfaceId == interfaceId ||
-            type(IAllowListDrop).interfaceId == interfaceId;
+            type(INFTNameGenDrop).interfaceId == interfaceId;
     }
 }

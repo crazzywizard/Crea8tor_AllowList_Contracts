@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import {IAllowListMetadataRenderer} from "./IAllowListMetadataRenderer.sol";
+import {INFTNameGenMetadataRenderer} from "./INFTNameGenMetadataRenderer.sol";
 
 /**
 
@@ -18,7 +18,7 @@ import {IAllowListMetadataRenderer} from "./IAllowListMetadataRenderer.sol";
 */
 
 /// @notice Interface for ZORA Drops contract
-interface IAllowListDrop {
+interface INFTNameGenDrop {
     // Access errors
 
     /// @notice Only admin can access this function
@@ -99,13 +99,13 @@ interface IAllowListDrop {
     /// @param renderer new metadata renderer address
     event UpdatedMetadataRenderer(
         address sender,
-        IAllowListMetadataRenderer renderer
+        INFTNameGenMetadataRenderer renderer
     );
 
     /// @notice General configuration for NFT Minting and bookkeeping
     struct Configuration {
         /// @dev Metadata renderer (uint160)
-        IAllowListMetadataRenderer metadataRenderer;
+        INFTNameGenMetadataRenderer metadataRenderer;
         /// @dev Total size of edition that can be minted (uint160+64 = 224)
         uint64 editionSize;
         /// @dev Royalty amount in bps (uint224+16 = 240)
@@ -266,7 +266,7 @@ interface IAllowListDrop {
     /// @param newRenderer new address for renderer
     /// @param setupRenderer data to call to bootstrap data for the new renderer (optional)
     function setMetadataRenderer(
-        IAllowListMetadataRenderer newRenderer,
+        INFTNameGenMetadataRenderer newRenderer,
         bytes memory setupRenderer
     ) external;
 

@@ -7,7 +7,7 @@ import {IERC721MetadataUpgradeable} from "@openzeppelin/contracts-upgradeable/in
 import {IERC2981Upgradeable} from "@openzeppelin/contracts-upgradeable/interfaces/IERC2981Upgradeable.sol";
 import {NFTMetadataRenderer} from "../utils/NFTMetadataRenderer.sol";
 import {MetadataRenderAdminCheck} from "./MetadataRenderAdminCheck.sol";
-import {IAllowListMetadataRenderer} from "../interfaces/IAllowListMetadataRenderer.sol";
+import {INFTNameGenMetadataRenderer} from "../interfaces/INFTNameGenMetadataRenderer.sol";
 
 interface DropConfigGetter {
     function config()
@@ -16,9 +16,9 @@ interface DropConfigGetter {
         returns (IERC721Drop.Configuration memory config);
 }
 
-/// @notice AllowListMetadataRenderer for allow list support
-contract AllowListMetadataRenderer is
-    IAllowListMetadataRenderer,
+/// @notice NFTNameGenMetadataRenderer for allow list support
+contract NFTNameGenMetadataRenderer is
+    INFTNameGenMetadataRenderer,
     MetadataRenderAdminCheck
 {
     /// @notice Storage for token edition information

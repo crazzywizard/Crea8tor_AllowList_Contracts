@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import {AllowListMetadataRenderer} from "../../src/metadata/AllowListMetadataRenderer.sol";
+import {NFTNameGenMetadataRenderer} from "../../src/metadata/NFTNameGenMetadataRenderer.sol";
 import {MetadataRenderAdminCheck} from "../../src/metadata/MetadataRenderAdminCheck.sol";
 import {IMetadataRenderer} from "../../src/interfaces/IMetadataRenderer.sol";
 import {DropMockBase} from "./DropMockBase.sol";
@@ -54,11 +54,11 @@ contract IERC721OnChainDataMock {
     }
 }
 
-contract AllowListMetadataRendererTest is DSTest {
+contract NFTNameGenMetadataRendererTest is DSTest {
     Vm public constant vm = Vm(HEVM_ADDRESS);
     address public constant mediaContract = address(123456);
-    AllowListMetadataRenderer public allowListRenderer =
-        new AllowListMetadataRenderer();
+    NFTNameGenMetadataRenderer public allowListRenderer =
+        new NFTNameGenMetadataRenderer();
 
     function test_EditionMetadataInits() public {
         vm.startPrank(address(0x123));

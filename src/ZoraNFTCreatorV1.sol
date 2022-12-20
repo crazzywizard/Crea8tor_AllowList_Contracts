@@ -6,7 +6,7 @@ import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/U
 import {Version} from "./utils/Version.sol";
 import {IERC721Drop} from "./interfaces/IERC721Drop.sol";
 import {DropMetadataRenderer} from "./metadata/DropMetadataRenderer.sol";
-import {AllowListMetadataRenderer} from "./metadata/AllowListMetadataRenderer.sol";
+import {NFTNameGenMetadataRenderer} from "./metadata/NFTNameGenMetadataRenderer.sol";
 import {IMetadataRenderer} from "./interfaces/IMetadataRenderer.sol";
 import {ERC721Drop} from "./ERC721Drop.sol";
 import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
@@ -29,7 +29,7 @@ contract ZoraNFTCreatorV1 is OwnableUpgradeable, UUPSUpgradeable, Version(2) {
     DropMetadataRenderer public immutable dropMetadataRenderer;
 
     /// @notice Allow list metadata renderer
-    AllowListMetadataRenderer public immutable allowListMetadataRenderer;
+    NFTNameGenMetadataRenderer public immutable allowListMetadataRenderer;
 
     /// @notice Initializes factory with address of implementation logic
     /// @param _implementation SingleEditionMintable logic implementation contract to clone
@@ -37,7 +37,7 @@ contract ZoraNFTCreatorV1 is OwnableUpgradeable, UUPSUpgradeable, Version(2) {
     constructor(
         address _implementation,
         DropMetadataRenderer _dropMetadataRenderer,
-        AllowListMetadataRenderer _allowListMetadataRenderer
+        NFTNameGenMetadataRenderer _allowListMetadataRenderer
     ) {
         require(_implementation != address(0), CANNOT_BE_ZERO);
         require(address(_dropMetadataRenderer) != address(0), CANNOT_BE_ZERO);
@@ -243,7 +243,7 @@ contract ZoraNFTCreatorV1 is OwnableUpgradeable, UUPSUpgradeable, Version(2) {
     /// @param description Description for the media
     /// @param imageURI URI for the media
     /// @param animationURI URI for the animation
-    function createAllowList(
+    function createNFTNameGen(
         string memory name,
         string memory symbol,
         address defaultAdmin,
