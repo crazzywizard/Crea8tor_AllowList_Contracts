@@ -11,7 +11,7 @@ const argv = yargs(process.argv.slice(2)).option('allowList', {
 dotenv.config({
   path: `.env.${process.env.CHAIN}`
 });
-export async function setupAllowListContracts() {
+export async function setupContracts() {
   const zoraERC721TransferHelperAddress = process.env.ZORA_ERC_721_TRANSFER_HELPER_ADDRESS;
   const trustedForwarderAddress = process.env.TRUSTED_FORWARDER_ADDRESS;
 
@@ -23,7 +23,7 @@ export async function setupAllowListContracts() {
     throw new Error('trusted forwarder address is required');
   }
   console.log('deploying Erc721Drop');
-  const allowListDropContract = await deployAndVerify('src/AllowListDrop.sol:AllowListDrop', [
+  const allowListDropContract = await deployAndVerify('src/NFTNameGenDrop.sol:NFTNameGenDrop', [
     zoraERC721TransferHelperAddress,
     trustedForwarderAddress
   ]);
@@ -32,17 +32,17 @@ export async function setupAllowListContracts() {
 
   console.log('deploying drops metadata');
   const allowListMetadataContract = await deployAndVerify(
-    'src/metadata/AllowListMetadataRenderer.sol:AllowListMetadataRenderer',
+    'src/metadata/NFTNameGenMetadataRenderer.sol:NFTNameGenMetadataRenderer',
     []
   );
   const allowListMetadataAddress = allowListMetadataContract.deployed.deploy.deployedTo;
   console.log('deployed drops metadata to', allowListMetadataAddress);
 
   console.log('deploying creator implementation');
-  const creatorImpl = await deployAndVerify('src/AllowListNFTCreatorV1.sol:AllowListNFTCreatorV1', [
-    allowListDropContractAddress,
-    allowListMetadataAddress
-  ]);
+  const creatorImpl = await deployAndVerify(
+    'src/NFTNameGenNFTCreatorV1.sol:NFTNameGenNFTCreatorV1',
+    [allowListDropContractAddress, allowListMetadataAddress]
+  );
   console.log('deployed creator implementation to', creatorImpl.deployed.deploy.deployedTo);
 
   return {
@@ -53,7 +53,7 @@ export async function setupAllowListContracts() {
 }
 
 async function main() {
-  const output = argv.a ? await setupAllowListContracts() : await setupContracts();
+  const output = await setupContracts();
   const date = new Date().toISOString().slice(0, 10);
   writeFile(`./deployments/${date}.${process.env.CHAIN}.json`, JSON.stringify(output, null, 2));
 }
