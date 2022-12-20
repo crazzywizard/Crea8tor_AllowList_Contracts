@@ -2,12 +2,7 @@ import { deployAndVerify } from './contract.mjs';
 import { writeFile } from 'fs/promises';
 import dotenv from 'dotenv';
 import esMain from 'es-main';
-import yargs from 'yargs';
-const argv = yargs(process.argv.slice(2)).option('allowList', {
-  alias: 'a',
-  type: 'boolean',
-  description: 'Deploy Allow List Contracts'
-}).argv;
+
 dotenv.config({
   path: `.env.${process.env.CHAIN}`
 });
@@ -23,31 +18,31 @@ export async function setupContracts() {
     throw new Error('trusted forwarder address is required');
   }
   console.log('deploying Erc721Drop');
-  const allowListDropContract = await deployAndVerify('src/NFTNameGenDrop.sol:NFTNameGenDrop', [
+  const NFTNameGenDropContract = await deployAndVerify('src/NFTNameGenDrop.sol:NFTNameGenDrop', [
     zoraERC721TransferHelperAddress,
     trustedForwarderAddress
   ]);
-  const allowListDropContractAddress = allowListDropContract.deployed.deploy.deployedTo;
-  console.log('deployed drop contract to ', allowListDropContractAddress);
+  const NFTNameGenDropContractAddress = NFTNameGenDropContract.deployed.deploy.deployedTo;
+  console.log('deployed drop contract to ', NFTNameGenDropContractAddress);
 
   console.log('deploying drops metadata');
-  const allowListMetadataContract = await deployAndVerify(
+  const NFTNameGenMetadataContract = await deployAndVerify(
     'src/metadata/NFTNameGenMetadataRenderer.sol:NFTNameGenMetadataRenderer',
     []
   );
-  const allowListMetadataAddress = allowListMetadataContract.deployed.deploy.deployedTo;
-  console.log('deployed drops metadata to', allowListMetadataAddress);
+  const NFTNameGenMetadataAddress = NFTNameGenMetadataContract.deployed.deploy.deployedTo;
+  console.log('deployed drops metadata to', NFTNameGenMetadataAddress);
 
   console.log('deploying creator implementation');
   const creatorImpl = await deployAndVerify(
     'src/NFTNameGenNFTCreatorV1.sol:NFTNameGenNFTCreatorV1',
-    [allowListDropContractAddress, allowListMetadataAddress]
+    [NFTNameGenDropContractAddress, NFTNameGenMetadataAddress]
   );
   console.log('deployed creator implementation to', creatorImpl.deployed.deploy.deployedTo);
 
   return {
-    allowListDropContract,
-    allowListMetadataContract,
+    NFTNameGenDropContract,
+    NFTNameGenMetadataContract,
     creatorImpl
   };
 }
