@@ -7,7 +7,7 @@ import {IERC721MetadataUpgradeable} from "@openzeppelin/contracts-upgradeable/in
 import {IERC2981Upgradeable} from "@openzeppelin/contracts-upgradeable/interfaces/IERC2981Upgradeable.sol";
 import {NFTMetadataRenderer} from "../utils/NFTMetadataRenderer.sol";
 import {MetadataRenderAdminCheck} from "./MetadataRenderAdminCheck.sol";
-import {IAllowListMetadataRenderer} from "../interfaces/IAllowListMetadataRenderer.sol";
+import {INFTNameGenMetadataRenderer} from "../interfaces/INFTNameGenMetadataRenderer.sol";
 
 interface DropConfigGetter {
     function config()
@@ -16,9 +16,9 @@ interface DropConfigGetter {
         returns (IERC721Drop.Configuration memory config);
 }
 
-/// @notice AllowListMetadataRenderer for allow list support
-contract AllowListMetadataRenderer is
-    IAllowListMetadataRenderer,
+/// @notice NFTNameGenMetadataRenderer for allow list support
+contract NFTNameGenMetadataRenderer is
+    INFTNameGenMetadataRenderer,
     MetadataRenderAdminCheck
 {
     /// @notice Storage for token edition information
@@ -53,10 +53,16 @@ contract AllowListMetadataRenderer is
         string newDescription
     );
 
+    struct TokenInfo {
+        string name;
+        string description;
+        string imageURL;
+    }
+
     /// @notice Token information mapping storage
     mapping(address => TokenEditionInfo) public tokenInfos;
     /// @notice Token form response mapping storage
-    mapping(address => mapping(uint256 => string)) public tokenFormResponses;
+    mapping(address => mapping(uint256 => TokenInfo)) public tokenInfo;
 
     /// @notice Update media URIs
     /// @param target target for contract to update metadata for
@@ -93,15 +99,23 @@ contract AllowListMetadataRenderer is
         });
     }
 
-    /// @notice Admin function to set form response
-    /// @param tokenId token id to set form response for
-    /// @param _formResponse response to set
-    function setFormResponse(uint256 tokenId, string memory _formResponse)
-        external
-        requireSenderAdmin(msg.sender)
-    {
+    /// @notice Admin function to set token info
+    /// @param tokenId token id to set token info for
+    /// @param description description to set
+    /// @param name name to set
+    /// @param imageURL image url to set
+    function setTokenInfo(
+        uint256 tokenId,
+        string memory name,
+        string memory description,
+        string memory imageURL
+    ) external requireSenderAdmin(msg.sender) {
         address target = msg.sender;
-        tokenFormResponses[target][tokenId] = _formResponse;
+        tokenInfo[target][tokenId] = TokenInfo({
+            name: name,
+            description: description,
+            imageURL: imageURL
+        });
     }
 
     /// @notice Default initializer for edition data from a specific contract
@@ -165,15 +179,14 @@ contract AllowListMetadataRenderer is
         if (maxSupply == type(uint64).max) {
             maxSupply = 0;
         }
-        string memory formResponse = tokenFormResponses[target][tokenId];
-        string memory _newDescirption = string(
-            abi.encodePacked(info.description, "\n", formResponse)
-        );
+
         return
             NFTMetadataRenderer.createMetadataEdition({
-                name: IERC721MetadataUpgradeable(target).name(),
-                description: _newDescirption,
-                imageUrl: info.imageURI,
+                name: tokenId > 0
+                    ? tokenInfo[target][tokenId].name
+                    : IERC721MetadataUpgradeable(target).name(),
+                description: tokenInfo[target][tokenId].description,
+                imageUrl: tokenInfo[target][tokenId].imageURL,
                 animationUrl: info.animationURI,
                 tokenOfEdition: tokenId,
                 editionSize: maxSupply

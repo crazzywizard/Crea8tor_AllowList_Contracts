@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import {IAllowListMetadataRenderer} from "./IAllowListMetadataRenderer.sol";
+import {INFTNameGenMetadataRenderer} from "./INFTNameGenMetadataRenderer.sol";
 
 /**
 
@@ -18,7 +18,7 @@ import {IAllowListMetadataRenderer} from "./IAllowListMetadataRenderer.sol";
 */
 
 /// @notice Interface for ZORA Drops contract
-interface IAllowListDrop {
+interface INFTNameGenDrop {
     // Access errors
 
     /// @notice Only admin can access this function
@@ -99,13 +99,13 @@ interface IAllowListDrop {
     /// @param renderer new metadata renderer address
     event UpdatedMetadataRenderer(
         address sender,
-        IAllowListMetadataRenderer renderer
+        INFTNameGenMetadataRenderer renderer
     );
 
     /// @notice General configuration for NFT Minting and bookkeeping
     struct Configuration {
         /// @dev Metadata renderer (uint160)
-        IAllowListMetadataRenderer metadataRenderer;
+        INFTNameGenMetadataRenderer metadataRenderer;
         /// @dev Total size of edition that can be minted (uint160+64 = 224)
         uint64 editionSize;
         /// @dev Royalty amount in bps (uint224+16 = 240)
@@ -225,12 +225,16 @@ interface IAllowListDrop {
 
     /// @notice External purchase function (payable in eth)
     /// @param quantity to purchase
-    /// @param _formResponse form response data
+    /// @param _name name of the token
+    /// @param _description description of the token
+    /// @param _imageURL image url of the token
     /// @return first minted token ID
-    function purchase(uint256 quantity, string memory _formResponse)
-        external
-        payable
-        returns (uint256);
+    function purchase(
+        uint256 quantity,
+        string memory _name,
+        string memory _description,
+        string memory _imageURL
+    ) external payable returns (uint256);
 
     /// @notice External purchase presale function (takes a merkle proof and matches to root) (payable in eth)
     /// @param quantity to purchase
@@ -262,7 +266,7 @@ interface IAllowListDrop {
     /// @param newRenderer new address for renderer
     /// @param setupRenderer data to call to bootstrap data for the new renderer (optional)
     function setMetadataRenderer(
-        IAllowListMetadataRenderer newRenderer,
+        INFTNameGenMetadataRenderer newRenderer,
         bytes memory setupRenderer
     ) external;
 

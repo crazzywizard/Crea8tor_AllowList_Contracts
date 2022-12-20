@@ -4,14 +4,14 @@ pragma solidity ^0.8.15;
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {Version} from "./utils/Version.sol";
-import {IAllowListDrop} from "./interfaces/IAllowListDrop.sol";
-import {IAllowListMetadataRenderer} from "./interfaces/IAllowListMetadataRenderer.sol";
-import {AllowListDrop} from "./AllowListDrop.sol";
+import {INFTNameGenDrop} from "./interfaces/INFTNameGenDrop.sol";
+import {INFTNameGenMetadataRenderer} from "./interfaces/INFTNameGenMetadataRenderer.sol";
+import {NFTNameGenDrop} from "./NFTNameGenDrop.sol";
 import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
-import {AllowListMetadataRenderer} from "./metadata/AllowListMetadataRenderer.sol";
+import {NFTNameGenMetadataRenderer} from "./metadata/NFTNameGenMetadataRenderer.sol";
 
 /// @notice Allow List NFT Creator V1
-contract AllowListNFTCreatorV1 is
+contract NFTNameGenNFTCreatorV1 is
     OwnableUpgradeable,
     UUPSUpgradeable,
     Version(2)
@@ -29,14 +29,14 @@ contract AllowListNFTCreatorV1 is
     address public immutable implementation;
 
     /// @notice Allow list metadata renderer
-    AllowListMetadataRenderer public immutable allowListMetadataRenderer;
+    NFTNameGenMetadataRenderer public immutable allowListMetadataRenderer;
 
     /// @notice Initializes factory with address of implementation logic
     /// @param _implementation SingleEditionMintable logic implementation contract to clone
     /// @param _allowListMetadataRenderer Metadata renderer for drops
     constructor(
         address _implementation,
-        AllowListMetadataRenderer _allowListMetadataRenderer
+        NFTNameGenMetadataRenderer _allowListMetadataRenderer
     ) {
         require(_implementation != address(0), CANNOT_BE_ZERO);
         require(
@@ -107,15 +107,15 @@ contract AllowListNFTCreatorV1 is
         uint64 editionSize,
         uint16 royaltyBPS,
         address payable fundsRecipient,
-        IAllowListDrop.ERC20SalesConfiguration memory saleConfig,
-        IAllowListMetadataRenderer metadataRenderer,
+        INFTNameGenDrop.ERC20SalesConfiguration memory saleConfig,
+        INFTNameGenMetadataRenderer metadataRenderer,
         bytes memory metadataInitializer
     ) public returns (address newDrop) {
         newDrop = Clones.clone(implementation);
 
         address payable newDropAddress = payable(newDrop);
 
-        AllowListDrop(newDropAddress).initialize(
+        NFTNameGenDrop(newDropAddress).initialize(
             name,
             symbol,
             defaultAdmin,
@@ -143,8 +143,8 @@ contract AllowListNFTCreatorV1 is
         uint64 editionSize,
         uint16 royaltyBPS,
         address payable fundsRecipient,
-        IAllowListDrop.ERC20SalesConfiguration memory saleConfig,
-        IAllowListMetadataRenderer metadataRenderer,
+        INFTNameGenDrop.ERC20SalesConfiguration memory saleConfig,
+        INFTNameGenMetadataRenderer metadataRenderer,
         bytes memory metadataInitializer
     ) internal returns (address) {
         return
@@ -171,14 +171,14 @@ contract AllowListNFTCreatorV1 is
     /// @param description Description for the media
     /// @param imageURI URI for the media
     /// @param animationURI URI for the animation
-    function createAllowList(
+    function createNFTNameGen(
         string memory name,
         string memory symbol,
         address defaultAdmin,
         uint64 editionSize,
         uint16 royaltyBPS,
         address payable fundsRecipient,
-        IAllowListDrop.ERC20SalesConfiguration memory saleConfig,
+        INFTNameGenDrop.ERC20SalesConfiguration memory saleConfig,
         string memory description,
         string memory imageURI,
         string memory animationURI

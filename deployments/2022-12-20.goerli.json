@@ -1,0 +1,59 @@
+{
+  "allowListDropContract": {
+    "deployed": {
+      "deploy": {
+        "deployer": "0xc59b4E5E6311e2e6dAF21A8C16C6A6d56220EC8e",
+        "deployedTo": "0xe1D3D8f1bc8d5C888c21fC054C35C4ac8fc7FAF6",
+        "transactionHash": "0xb94840db2fdfaac802a86be20e50da27e5e1d8eb351d8edf799e2fa9209ec276"
+      },
+      "contractName": "NFTNameGenDrop",
+      "contractPath": "src/NFTNameGenDrop.sol",
+      "args": [
+        "0x909e9efE4D87d1a6018C2065aE642b6D0447bc91",
+        "0xc82BbE41f2cF04e3a8efA18F7032BDD7f6d98a81"
+      ]
+    },
+    "verify": {
+      "verify": "Start verifying contract `0xe1d3d8f1bc8d5c888c21fc054c35c4ac8fc7faf6` deployed on mumbai\n\nSubmitting verification for [src/NFTNameGenDrop.sol:NFTNameGenDrop] \"0xe1D3D8f1bc8d5C888c21fC054C35C4ac8fc7FAF6\".\nSubmitted contract for verification:\n\tResponse: `OK`\n\tGUID: `k7hxrelmqdis2l4b9yzc4ft8ia6husjrcgljm38pafjdqyxw8s`\n\tURL:\n        https://mumbai.polygonscan.com/address/0xe1d3d8f1bc8d5c888c21fc054c35c4ac8fc7faf6\n",
+      "contractName": "NFTNameGenDrop",
+      "contractPath": "src/NFTNameGenDrop.sol"
+    }
+  },
+  "allowListMetadataContract": {
+    "deployed": {
+      "deploy": {
+        "deployer": "0xc59b4E5E6311e2e6dAF21A8C16C6A6d56220EC8e",
+        "deployedTo": "0x6AB455eA4DbB8dCDA74619AAAF4476E11f3cF33E",
+        "transactionHash": "0x7d218c4aa9eb102b65a070c6060001b85af47e57a261dc5df4af248bfeeb7f0c"
+      },
+      "contractName": "NFTNameGenMetadataRenderer",
+      "contractPath": "src/metadata/NFTNameGenMetadataRenderer.sol",
+      "args": []
+    },
+    "verify": {
+      "verify": "Start verifying contract `0x6ab455ea4dbb8dcda74619aaaf4476e11f3cf33e` deployed on mumbai\n\nSubmitting verification for [src/metadata/NFTNameGenMetadataRenderer.sol:NFTNameGenMetadataRenderer] \"0x6AB455eA4DbB8dCDA74619AAAF4476E11f3cF33E\".\nSubmitted contract for verification:\n\tResponse: `OK`\n\tGUID: `pc1jgwe9eh9usxjhgkzjq6rkdpvfilc99tw7rt1g6dprg6ndjy`\n\tURL:\n        https://mumbai.polygonscan.com/address/0x6ab455ea4dbb8dcda74619aaaf4476e11f3cf33e\n",
+      "contractName": "NFTNameGenMetadataRenderer",
+      "contractPath": "src/metadata/NFTNameGenMetadataRenderer.sol"
+    }
+  },
+  "creatorImpl": {
+    "deployed": {
+      "deploy": {
+        "deployer": "0xc59b4E5E6311e2e6dAF21A8C16C6A6d56220EC8e",
+        "deployedTo": "0x68dc4F3716d7774a58f35Db81fdD0dcE0f080cF0",
+        "transactionHash": "0x1faf5e4466acfe1c5de95b297bbcf833c052643fae20b15763955c312864bfe0"
+      },
+      "contractName": "NFTNameGenNFTCreatorV1",
+      "contractPath": "src/NFTNameGenNFTCreatorV1.sol",
+      "args": [
+        "0xe1D3D8f1bc8d5C888c21fC054C35C4ac8fc7FAF6",
+        "0x6AB455eA4DbB8dCDA74619AAAF4476E11f3cF33E"
+      ]
+    },
+    "verify": {
+      "verify": "Start verifying contract `0x68dc4f3716d7774a58f35db81fdd0dce0f080cf0` deployed on mumbai\n\nSubmitting verification for [src/NFTNameGenNFTCreatorV1.sol:NFTNameGenNFTCreatorV1] \"0x68dc4F3716d7774a58f35Db81fdD0dcE0f080cF0\".\nSubmitted contract for verification:\n\tResponse: `OK`\n\tGUID: `hdwp3hmf7tzzrtvzkr3dspjjeliz4xsiwkuzdkqdjalyh6lvvg`\n\tURL:\n        https://mumbai.polygonscan.com/address/0x68dc4f3716d7774a58f35db81fdd0dce0f080cf0\n",
+      "contractName": "NFTNameGenNFTCreatorV1",
+      "contractPath": "src/NFTNameGenNFTCreatorV1.sol"
+    }
+  }
+}

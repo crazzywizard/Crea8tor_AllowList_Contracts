@@ -8,7 +8,7 @@ import {IMetadataRenderer} from "../src/interfaces/IMetadataRenderer.sol";
 import "../src/ZoraNFTCreatorV1.sol";
 import "../src/ZoraNFTCreatorProxy.sol";
 import {MockMetadataRenderer} from "./metadata/MockMetadataRenderer.sol";
-import {AllowListMetadataRenderer} from "../src/metadata/AllowListMetadataRenderer.sol";
+import {NFTNameGenMetadataRenderer} from "../src/metadata/NFTNameGenMetadataRenderer.sol";
 import {FactoryUpgradeGate} from "../src/FactoryUpgradeGate.sol";
 import {IERC721AUpgradeable} from "erc721a-upgradeable/IERC721AUpgradeable.sol";
 
@@ -22,13 +22,13 @@ contract ZoraNFTCreatorV1Test is DSTest {
     ERC721Drop public dropImpl;
     ZoraNFTCreatorV1 public creator;
     DropMetadataRenderer public dropMetadataRenderer;
-    AllowListMetadataRenderer public allowListMetadataRenderer;
+    NFTNameGenMetadataRenderer public allowListMetadataRenderer;
 
     function setUp() public {
         vm.prank(DEFAULT_ZORA_DAO_ADDRESS);
         dropImpl = new ERC721Drop(address(1234));
         dropMetadataRenderer = new DropMetadataRenderer();
-        allowListMetadataRenderer = new AllowListMetadataRenderer();
+        allowListMetadataRenderer = new NFTNameGenMetadataRenderer();
         ZoraNFTCreatorV1 impl = new ZoraNFTCreatorV1(
             address(dropImpl),
             dropMetadataRenderer,
@@ -121,8 +121,8 @@ contract ZoraNFTCreatorV1Test is DSTest {
         assertEq(drop.tokenURI(1), "DEMO");
     }
 
-    function test_CreateAllowList() public {
-        creator.createAllowList(
+    function test_CreateNFTNameGen() public {
+        creator.createNFTNameGen(
             "name",
             "symbol",
             DEFAULT_FUNDS_RECIPIENT_ADDRESS,
@@ -145,8 +145,8 @@ contract ZoraNFTCreatorV1Test is DSTest {
         );
     }
 
-    function test_CreateAllowListAndMint() public {
-        address deployedDrop = creator.createAllowList(
+    function test_CreateNFTNameGenAndMint() public {
+        address deployedDrop = creator.createNFTNameGen(
             "name",
             "symbol",
             DEFAULT_FUNDS_RECIPIENT_ADDRESS,
@@ -172,8 +172,8 @@ contract ZoraNFTCreatorV1Test is DSTest {
         assertEq(IERC721AUpgradeable(deployedDrop).ownerOf(1), address(this));
     }
 
-    function test_CreateAllowListDrop() public {
-        AllowListMetadataRenderer mockRenderer = new AllowListMetadataRenderer();
+    function test_CreateNFTNameGenDrop() public {
+        NFTNameGenMetadataRenderer mockRenderer = new NFTNameGenMetadataRenderer();
         bytes memory data = abi.encode(
             "Description for metadata",
             "https://example.com/image.png",
@@ -211,7 +211,7 @@ contract ZoraNFTCreatorV1Test is DSTest {
         drop.purchase(1);
         assertEq(
             drop.tokenURI(1),
-            "data:application/json;base64,eyJuYW1lIjogIm5hbWUgMS8xMDAwIiwgImRlc2NyaXB0aW9uIjogIkRlc2NyaXB0aW9uIGZvciBtZXRhZGF0YQoiLCAiaW1hZ2UiOiAiaHR0cHM6Ly9leGFtcGxlLmNvbS9pbWFnZS5wbmciLCAiYW5pbWF0aW9uX3VybCI6ICJodHRwczovL2V4YW1wbGUuY29tL2FuaW1hdGlvbi5tcDQiLCAicHJvcGVydGllcyI6IHsibnVtYmVyIjogMSwgIm5hbWUiOiAibmFtZSJ9fQ=="
+            "data:application/json;base64,eyJuYW1lIjogIiAxLzEwMDAiLCAiZGVzY3JpcHRpb24iOiAiIiwgImFuaW1hdGlvbl91cmwiOiAiaHR0cHM6Ly9leGFtcGxlLmNvbS9hbmltYXRpb24ubXA0IiwgInByb3BlcnRpZXMiOiB7Im51bWJlciI6IDEsICJuYW1lIjogIiJ9fQ=="
         );
     }
 }
