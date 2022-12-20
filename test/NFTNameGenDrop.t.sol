@@ -149,13 +149,19 @@ contract NFTNameGenDropTest is DSTest {
 
         vm.deal(address(456), uint256(amount) * 2);
         vm.prank(address(456));
-        zoraNFTBase.purchase{value: amount}(1, "name", "description", "image");
+        zoraNFTBase.purchase{value: amount}(
+            1,
+            "name",
+            "description",
+            "image",
+            address(23)
+        );
 
         assertEq(zoraNFTBase.saleDetails().maxSupply, 10);
         assertEq(zoraNFTBase.saleDetails().totalMinted, 1);
         assertEq(zoraNFTBase.saleDetails().erc20PaymentToken, address(0));
         require(
-            zoraNFTBase.ownerOf(1) == address(456),
+            zoraNFTBase.ownerOf(1) == address(23),
             "owner is wrong for new minted token"
         );
         assertEq(address(zoraNFTBase).balance, amount);
@@ -183,11 +189,23 @@ contract NFTNameGenDropTest is DSTest {
         vm.prank(address(456));
         if (amount > 0) {
             vm.expectRevert("ERC20: insufficient allowance");
-            zoraNFTBase.purchase(1, "name", "description", "image");
+            zoraNFTBase.purchase(
+                1,
+                "name",
+                "description",
+                "image",
+                address(23)
+            );
         } else {
-            zoraNFTBase.purchase(1, "name", "description", "image");
+            zoraNFTBase.purchase(
+                1,
+                "name",
+                "description",
+                "image",
+                address(23)
+            );
             require(
-                zoraNFTBase.ownerOf(1) == address(456),
+                zoraNFTBase.ownerOf(1) == address(23),
                 "owner is wrong for new minted token"
             );
             assertEq(zoraNFTBase.saleDetails().totalMinted, 1);
@@ -215,9 +233,9 @@ contract NFTNameGenDropTest is DSTest {
         vm.prank(address(1));
         ct.approve(address(zoraNFTBase), type(uint256).max);
         vm.prank(address(1));
-        zoraNFTBase.purchase(1, "name", "description", "image");
+        zoraNFTBase.purchase(1, "name", "description", "image", address(23));
         require(
-            zoraNFTBase.ownerOf(1) == address(1),
+            zoraNFTBase.ownerOf(1) == address(23),
             "owner is wrong for new minted token"
         );
         assertEq(zoraNFTBase.saleDetails().totalMinted, 1);
@@ -252,7 +270,8 @@ contract NFTNameGenDropTest is DSTest {
             1,
             "name",
             "description",
-            "image"
+            "image",
+            address(23)
         );
 
         assertEq(zoraNFTBase.saleDetails().maxSupply, 10);
@@ -281,11 +300,12 @@ contract NFTNameGenDropTest is DSTest {
             1,
             "name",
             "description",
-            "image"
+            "image",
+            address(23)
         );
 
         assertEq(zoraNFTBase.saleDetails().totalMinted, 1);
-        assertEq(zoraNFTBase.ownerOf(1), address(456));
+        assertEq(zoraNFTBase.ownerOf(1), address(23));
     }
 
     function test_Mint() public setupZoraNFTBase(10) {
@@ -307,7 +327,8 @@ contract NFTNameGenDropTest is DSTest {
             1,
             "name",
             "description",
-            "image"
+            "image",
+            address(23)
         );
         vm.prank(DEFAULT_OWNER_ADDRESS);
         zoraNFTBase.setSaleConfiguration({
@@ -331,7 +352,8 @@ contract NFTNameGenDropTest is DSTest {
             1,
             "name",
             "description",
-            "image"
+            "image",
+            address(23)
         );
     }
 
@@ -382,7 +404,8 @@ contract NFTNameGenDropTest is DSTest {
             limit,
             "name",
             "description",
-            "image"
+            "image",
+            address(23)
         );
 
         assertEq(zoraNFTBase.saleDetails().totalMinted, limit);
@@ -394,7 +417,8 @@ contract NFTNameGenDropTest is DSTest {
             uint256(limit) + 1,
             "name",
             "description",
-            "image"
+            "image",
+            address(23)
         );
 
         assertEq(zoraNFTBase.saleDetails().totalMinted, limit);
@@ -481,7 +505,8 @@ contract NFTNameGenDropTest is DSTest {
             3,
             "name",
             "description",
-            "image"
+            "image",
+            address(23)
         );
         vm.prank(DEFAULT_OWNER_ADDRESS);
         zoraNFTBase.adminMint(address(0x1234), 2);
@@ -511,7 +536,8 @@ contract NFTNameGenDropTest is DSTest {
             3,
             "name",
             "description",
-            "image"
+            "image",
+            address(23)
         );
         vm.prank(DEFAULT_OWNER_ADDRESS);
         zoraNFTBase.adminMint(address(0x1234), 2);
@@ -525,7 +551,8 @@ contract NFTNameGenDropTest is DSTest {
             3,
             "name",
             "description",
-            "image"
+            "image",
+            address(23)
         );
     }
 
@@ -571,7 +598,13 @@ contract NFTNameGenDropTest is DSTest {
         vm.deal(address(456), uint256(1) * 2);
         vm.prank(address(456));
         vm.expectRevert(INFTNameGenDrop.Mint_SoldOut.selector);
-        zoraNFTBase.purchase{value: 1}(1, "name", "description", "image");
+        zoraNFTBase.purchase{value: 1}(
+            1,
+            "name",
+            "description",
+            "image",
+            address(23)
+        );
     }
 
     // test Admin airdrop

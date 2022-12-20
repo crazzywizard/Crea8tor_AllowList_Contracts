@@ -88,9 +88,10 @@ contract ZoraNFTCreatorV1Test is DSTest {
             1,
             "name",
             "description",
-            "image"
+            "image",
+            address(23)
         );
-        assertEq(IERC721AUpgradeable(deployedDrop).ownerOf(1), address(this));
+        assertEq(IERC721AUpgradeable(deployedDrop).ownerOf(1), address(23));
     }
 
     function test_CreateNFTNameGenDrop() public {
@@ -129,7 +130,7 @@ contract ZoraNFTCreatorV1Test is DSTest {
             drop.contractURI(),
             "data:application/json;base64,eyJuYW1lIjogIm5hbWUiLCAiZGVzY3JpcHRpb24iOiAiRGVzY3JpcHRpb24gZm9yIG1ldGFkYXRhIiwgInNlbGxlcl9mZWVfYmFzaXNfcG9pbnRzIjogMTAwLCAiZmVlX3JlY2lwaWVudCI6ICIweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMjEzMDMiLCAiaW1hZ2UiOiAiaHR0cHM6Ly9leGFtcGxlLmNvbS9pbWFnZS5wbmcifQ=="
         );
-        drop.purchase(1, "name", "description", "image");
+        drop.purchase(1, "name", "description", "image", address(23));
         assertEq(
             drop.tokenURI(1),
             "data:application/json;base64,eyJuYW1lIjogIm5hbWUgMS8xMDAwIiwgImRlc2NyaXB0aW9uIjogImRlc2NyaXB0aW9uIiwgImltYWdlIjogImltYWdlIiwgImFuaW1hdGlvbl91cmwiOiAiaHR0cHM6Ly9leGFtcGxlLmNvbS9hbmltYXRpb24ubXA0IiwgInByb3BlcnRpZXMiOiB7Im51bWJlciI6IDEsICJuYW1lIjogIm5hbWUifX0="
