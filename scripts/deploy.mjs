@@ -13,17 +13,23 @@ dotenv.config({
 });
 export async function setupAllowListContracts() {
   const zoraERC721TransferHelperAddress = process.env.ZORA_ERC_721_TRANSFER_HELPER_ADDRESS;
+  const trustedForwarderAddress = process.env.TRUSTED_FORWARDER_ADDRESS;
 
   if (!zoraERC721TransferHelperAddress) {
     throw new Error('erc721 transfer helper address is required');
   }
 
+  if (!trustedForwarderAddress) {
+    throw new Error('trusted forwarder address is required');
+  }
   console.log('deploying Erc721Drop');
   const allowListDropContract = await deployAndVerify('src/AllowListDrop.sol:AllowListDrop', [
-    zoraERC721TransferHelperAddress
+    zoraERC721TransferHelperAddress,
+    trustedForwarderAddress
   ]);
   const allowListDropContractAddress = allowListDropContract.deployed.deploy.deployedTo;
   console.log('deployed drop contract to ', allowListDropContractAddress);
+
   console.log('deploying drops metadata');
   const allowListMetadataContract = await deployAndVerify(
     'src/metadata/AllowListMetadataRenderer.sol:AllowListMetadataRenderer',
@@ -42,40 +48,6 @@ export async function setupAllowListContracts() {
   return {
     allowListDropContract,
     allowListMetadataContract,
-    creatorImpl
-  };
-}
-export async function setupContracts() {
-  const zoraERC721TransferHelperAddress = process.env.ZORA_ERC_721_TRANSFER_HELPER_ADDRESS;
-
-  if (!zoraERC721TransferHelperAddress) {
-    throw new Error('erc721 transfer helper address is required');
-  }
-
-  console.log('deploying Erc721Drop');
-  const dropContract = await deployAndVerify('src/ERC721Drop.sol:ERC721Drop', [
-    zoraERC721TransferHelperAddress
-  ]);
-  const dropContractAddress = dropContract.deployed.deploy.deployedTo;
-  console.log('deployed drop contract to ', dropContractAddress);
-  console.log('deploying drops metadata');
-  const dropMetadataContract = await deployAndVerify(
-    'src/metadata/DropMetadataRenderer.sol:DropMetadataRenderer',
-    []
-  );
-  const dropMetadataAddress = dropMetadataContract.deployed.deploy.deployedTo;
-  console.log('deployed drops metadata to', dropMetadataAddress);
-
-  console.log('deploying creator implementation');
-  const creatorImpl = await deployAndVerify('src/ZoraNFTCreatorV1.sol:ZoraNFTCreatorV1', [
-    dropContractAddress,
-    dropMetadataAddress
-  ]);
-  console.log('deployed creator implementation to', creatorImpl.deployed.deploy.deployedTo);
-
-  return {
-    dropContract,
-    dropMetadataContract,
     creatorImpl
   };
 }

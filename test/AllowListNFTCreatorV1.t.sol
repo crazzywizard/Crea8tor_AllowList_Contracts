@@ -25,7 +25,7 @@ contract ZoraNFTCreatorV1Test is DSTest {
 
     function setUp() public {
         vm.prank(DEFAULT_ZORA_DAO_ADDRESS);
-        dropImpl = new AllowListDrop(address(1234));
+        dropImpl = new AllowListDrop(address(1234), address(1235));
         allowListMetadataRenderer = new AllowListMetadataRenderer();
         AllowListNFTCreatorV1 impl = new AllowListNFTCreatorV1(
             address(dropImpl),
@@ -84,7 +84,12 @@ contract ZoraNFTCreatorV1Test is DSTest {
             "https://example.com/animation.mp4"
         );
 
-        IAllowListDrop(deployedDrop).purchase(1, "form response");
+        IAllowListDrop(deployedDrop).purchase(
+            1,
+            "name",
+            "description",
+            "image"
+        );
         assertEq(IERC721AUpgradeable(deployedDrop).ownerOf(1), address(this));
     }
 
@@ -124,10 +129,10 @@ contract ZoraNFTCreatorV1Test is DSTest {
             drop.contractURI(),
             "data:application/json;base64,eyJuYW1lIjogIm5hbWUiLCAiZGVzY3JpcHRpb24iOiAiRGVzY3JpcHRpb24gZm9yIG1ldGFkYXRhIiwgInNlbGxlcl9mZWVfYmFzaXNfcG9pbnRzIjogMTAwLCAiZmVlX3JlY2lwaWVudCI6ICIweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMjEzMDMiLCAiaW1hZ2UiOiAiaHR0cHM6Ly9leGFtcGxlLmNvbS9pbWFnZS5wbmcifQ=="
         );
-        drop.purchase(1, "form response");
+        drop.purchase(1, "name", "description", "image");
         assertEq(
             drop.tokenURI(1),
-            "data:application/json;base64,eyJuYW1lIjogIm5hbWUgMS8xMDAwIiwgImRlc2NyaXB0aW9uIjogIkRlc2NyaXB0aW9uIGZvciBtZXRhZGF0YQpmb3JtIHJlc3BvbnNlIiwgImltYWdlIjogImh0dHBzOi8vZXhhbXBsZS5jb20vaW1hZ2UucG5nIiwgImFuaW1hdGlvbl91cmwiOiAiaHR0cHM6Ly9leGFtcGxlLmNvbS9hbmltYXRpb24ubXA0IiwgInByb3BlcnRpZXMiOiB7Im51bWJlciI6IDEsICJuYW1lIjogIm5hbWUifX0="
+            "data:application/json;base64,eyJuYW1lIjogIm5hbWUgMS8xMDAwIiwgImRlc2NyaXB0aW9uIjogImRlc2NyaXB0aW9uIiwgImltYWdlIjogImltYWdlIiwgImFuaW1hdGlvbl91cmwiOiAiaHR0cHM6Ly9leGFtcGxlLmNvbS9hbmltYXRpb24ubXA0IiwgInByb3BlcnRpZXMiOiB7Im51bWJlciI6IDEsICJuYW1lIjogIm5hbWUifX0="
         );
     }
 }

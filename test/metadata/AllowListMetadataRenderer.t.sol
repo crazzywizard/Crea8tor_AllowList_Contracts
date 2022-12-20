@@ -166,7 +166,7 @@ contract AllowListMetadataRendererTest is DSTest {
         );
         // '{"name": "MOCK NAME 1/100", "description": "Description", "image": "image", "animation_url": "animation", "properties": {"number": 1, "name": "MOCK NAME"}}'
         assertEq(
-            "data:application/json;base64,eyJuYW1lIjogIk1PQ0sgTkFNRSAxLzEwMCIsICJkZXNjcmlwdGlvbiI6ICJEZXNjcmlwdGlvbgoiLCAiaW1hZ2UiOiAiaW1hZ2UiLCAiYW5pbWF0aW9uX3VybCI6ICJhbmltYXRpb24iLCAicHJvcGVydGllcyI6IHsibnVtYmVyIjogMSwgIm5hbWUiOiAiTU9DSyBOQU1FIn19",
+            "data:application/json;base64,eyJuYW1lIjogIiAxLzEwMCIsICJkZXNjcmlwdGlvbiI6ICIiLCAiYW5pbWF0aW9uX3VybCI6ICJhbmltYXRpb24iLCAicHJvcGVydGllcyI6IHsibnVtYmVyIjogMSwgIm5hbWUiOiAiIn19",
             allowListRenderer.tokenURI(1)
         );
     }
@@ -182,7 +182,7 @@ contract AllowListMetadataRendererTest is DSTest {
         );
         // {"name": "MOCK NAME 1", "description": "Description", "image": "image", "animation_url": "animation", "properties": {"number": 1, "name": "MOCK NAME"}}
         assertEq(
-            "data:application/json;base64,eyJuYW1lIjogIk1PQ0sgTkFNRSAxIiwgImRlc2NyaXB0aW9uIjogIkRlc2NyaXB0aW9uCiIsICJpbWFnZSI6ICJpbWFnZSIsICJhbmltYXRpb25fdXJsIjogImFuaW1hdGlvbiIsICJwcm9wZXJ0aWVzIjogeyJudW1iZXIiOiAxLCAibmFtZSI6ICJNT0NLIE5BTUUifX0=",
+            "data:application/json;base64,eyJuYW1lIjogIiAxIiwgImRlc2NyaXB0aW9uIjogIiIsICJhbmltYXRpb25fdXJsIjogImFuaW1hdGlvbiIsICJwcm9wZXJ0aWVzIjogeyJudW1iZXIiOiAxLCAibmFtZSI6ICIifX0=",
             allowListRenderer.tokenURI(1)
         );
     }
@@ -211,12 +211,15 @@ contract AllowListMetadataRendererTest is DSTest {
         );
         allowListRenderer.initializeWithData(data);
 
-        allowListRenderer.setFormResponse(1, "formResponse");
-        string memory formResponse = allowListRenderer.tokenFormResponses(
-            address(0x123),
-            1
-        );
+        allowListRenderer.setTokenInfo(1, "name", "description", "image");
+        (
+            string memory name,
+            string memory description,
+            string memory imageURL
+        ) = allowListRenderer.tokenInfo(address(0x123), 1);
         vm.stopPrank();
-        assertEq(formResponse, "formResponse");
+        assertEq(name, "name");
+        assertEq(description, "description");
+        assertEq(imageURL, "image");
     }
 }

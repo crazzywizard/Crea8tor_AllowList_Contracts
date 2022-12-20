@@ -16,7 +16,12 @@ contract DummyMetadataRenderer is IAllowListMetadataRenderer {
         // no-op
     }
 
-    function setFormResponse(uint256, string memory) external {
+    function setTokenInfo(
+        uint256,
+        string memory,
+        string memory,
+        string memory
+    ) external {
         // no-op
     }
 }

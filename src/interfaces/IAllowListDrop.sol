@@ -225,12 +225,16 @@ interface IAllowListDrop {
 
     /// @notice External purchase function (payable in eth)
     /// @param quantity to purchase
-    /// @param _formResponse form response data
+    /// @param _name name of the token
+    /// @param _description description of the token
+    /// @param _imageURL image url of the token
     /// @return first minted token ID
-    function purchase(uint256 quantity, string memory _formResponse)
-        external
-        payable
-        returns (uint256);
+    function purchase(
+        uint256 quantity,
+        string memory _name,
+        string memory _description,
+        string memory _imageURL
+    ) external payable returns (uint256);
 
     /// @notice External purchase presale function (takes a merkle proof and matches to root) (payable in eth)
     /// @param quantity to purchase

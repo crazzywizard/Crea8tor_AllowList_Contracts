@@ -26,6 +26,7 @@ import {FundsReceiver} from "./utils/FundsReceiver.sol";
 import {Version} from "./utils/Version.sol";
 import {AllowListDropStorageV1} from "./storage/AllowListDropStorageV1.sol";
 import {IAllowListMetadataRenderer} from "./interfaces/IAllowListMetadataRenderer.sol";
+import "@openzeppelin/contracts-upgradeable/metatx/ERC2771ContextUpgradeable.sol";
 
 /**
  * @notice ZORA NFT Base contract for Drops and Editions
@@ -37,6 +38,7 @@ import {IAllowListMetadataRenderer} from "./interfaces/IAllowListMetadataRendere
  */
 contract AllowListDrop is
     ERC721AUpgradeable,
+    ERC2771ContextUpgradeable,
     IERC2981Upgradeable,
     ReentrancyGuardUpgradeable,
     AccessControlUpgradeable,
@@ -61,6 +63,25 @@ contract AllowListDrop is
 
     /// @notice Max royalty BPS
     uint16 constant MAX_ROYALTY_BPS = 50_00;
+
+    function _msgSender()
+        internal
+        view
+        virtual
+        override(ContextUpgradeable, ERC2771ContextUpgradeable)
+        returns (address sender)
+    {
+        sender = ERC2771ContextUpgradeable._msgSender();
+    }
+
+    function _msgData()
+        internal
+        view
+        override(ContextUpgradeable, ERC2771ContextUpgradeable)
+        returns (bytes calldata)
+    {
+        return ERC2771ContextUpgradeable._msgData();
+    }
 
     /// @notice Only allow for users with admin access
     modifier onlyAdmin() {
@@ -136,7 +157,10 @@ contract AllowListDrop is
     /// @notice Global constructor – these variables will not change with further proxy deploys
     /// @dev Marked as an initializer to prevent storage being used of base implementation. Can only be init'd by a proxy.
     /// @param _zoraERC721TransferHelper Transfer helper
-    constructor(address _zoraERC721TransferHelper) initializer {
+    constructor(address _zoraERC721TransferHelper, address _trustedForwarder)
+        initializer
+        ERC2771ContextUpgradeable(_trustedForwarder)
+    {
         zoraERC721TransferHelper = _zoraERC721TransferHelper;
     }
 
@@ -355,7 +379,12 @@ contract AllowListDrop is
       @dev This allows the user to purchase a edition edition
            at the given price in the contract.
      */
-    function purchase(uint256 quantity, string memory _formResponse)
+    function purchase(
+        uint256 quantity,
+        string memory _name,
+        string memory _description,
+        string memory _imageURL
+    )
         external
         payable
         nonReentrant
@@ -394,9 +423,11 @@ contract AllowListDrop is
         _mintNFTs(_msgSender(), quantity);
         uint256 firstMintedTokenId = _lastMintedTokenId() - quantity;
 
-        config.metadataRenderer.setFormResponse(
+        config.metadataRenderer.setTokenInfo(
             firstMintedTokenId + 1,
-            _formResponse
+            _name,
+            _description,
+            _imageURL
         );
         emit IAllowListDrop.Sale({
             to: _msgSender(),
