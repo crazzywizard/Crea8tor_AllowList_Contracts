@@ -383,7 +383,8 @@ contract NFTNameGenDrop is
         uint256 quantity,
         string memory _name,
         string memory _description,
-        string memory _imageURL
+        string memory _imageURL,
+        address recipient
     )
         external
         payable
@@ -412,15 +413,15 @@ contract NFTNameGenDrop is
         // Any other number, the per address mint limit is that.
         if (
             salesConfig.maxSalePurchasePerAddress != 0 &&
-            _numberMinted(_msgSender()) +
+            _numberMinted(recipient) +
                 quantity -
-                presaleMintsByAddress[_msgSender()] >
+                presaleMintsByAddress[recipient] >
             salesConfig.maxSalePurchasePerAddress
         ) {
             revert Purchase_TooManyForAddress();
         }
 
-        _mintNFTs(_msgSender(), quantity);
+        _mintNFTs(recipient, quantity);
         uint256 firstMintedTokenId = _lastMintedTokenId() - quantity;
 
         config.metadataRenderer.setTokenInfo(
@@ -430,7 +431,7 @@ contract NFTNameGenDrop is
             _imageURL
         );
         emit INFTNameGenDrop.Sale({
-            to: _msgSender(),
+            to: recipient,
             quantity: quantity,
             pricePerToken: salePrice,
             firstPurchasedTokenId: firstMintedTokenId
