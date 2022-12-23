@@ -26,6 +26,7 @@ import {FundsReceiver} from "./utils/FundsReceiver.sol";
 import {Version} from "./utils/Version.sol";
 import {NFTNameGenDropStorageV1} from "./storage/NFTNameGenDropStorageV1.sol";
 import {INFTNameGenMetadataRenderer} from "./interfaces/INFTNameGenMetadataRenderer.sol";
+import {LicenseVersion, CantBeEvil} from "@a16z/contracts/licenses/CantBeEvil.sol";
 import "@openzeppelin/contracts-upgradeable/metatx/ERC2771ContextUpgradeable.sol";
 
 /**
@@ -46,7 +47,8 @@ contract NFTNameGenDrop is
     OwnableSkeleton,
     FundsReceiver,
     Version(8),
-    NFTNameGenDropStorageV1
+    NFTNameGenDropStorageV1,
+    CantBeEvil(LicenseVersion.COMMERCIAL)
 {
     /// @dev This is the max mint batch size for the optimized ERC721A mint contract
     uint256 internal constant MAX_MINT_BATCH_SIZE = 8;

@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@a16z/contracts@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@a16z/contracts/-/contracts-0.0.9.tgz#e39cefa8ddbc272c29190d53a57eda2619a27fc4"
+  integrity sha512-Aj0oov1iLSPE4n6zAknQ6zoLniXazlcYlTwKPymEoyT3cQKbFaRnWE9EcVmYjASLTAzpWL3rnJkNmbYpIIwTlA==
+  dependencies:
+    "@openzeppelin/contracts" "^4.7.2"
+
 "@dotenv/cli@^2.2.2":
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/@dotenv/cli/-/cli-2.2.2.tgz#d97beac23e11afb54d6d175e9ce45a1f51e124a5"
@@ -473,6 +480,11 @@
     strip-ansi "^6.0.0"
     widest-line "^3.1.0"
     wrap-ansi "^6.2.0"
+
+"@openzeppelin/contracts@^4.7.2":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.8.0.tgz#6854c37df205dd2c056bdfa1b853f5d732109109"
+  integrity sha512-AGuwhRRL+NaKx73WKRNzeCxOCOCxpaqF+kp8TJ89QzAipSwZy/NoflkWaL9bywXFRhIzXt8j38sfF7KBKCPWLw==
 
 "@typechain/ethers-v5@10.0.0":
   version "10.0.0"
