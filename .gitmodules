@@ -13,3 +13,6 @@
 [submodule "lib/ERC721A-Upgradeable"]
 	path = lib/ERC721A-Upgradeable
 	url = https://github.com/chiru-labs/ERC721A-Upgradeable
+[submodule "lib/a16z-contracts"]
+	path = lib/a16z-contracts
+	url = https://github.com/a16z/a16z-contracts
