@@ -1045,6 +1045,7 @@ contract NFTNameGenDrop is
         override(
             IERC165Upgradeable,
             ERC721AUpgradeable,
+            CantBeEvil,
             AccessControlUpgradeable
         )
         returns (bool)
