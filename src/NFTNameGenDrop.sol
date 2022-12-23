@@ -26,7 +26,7 @@ import {FundsReceiver} from "./utils/FundsReceiver.sol";
 import {Version} from "./utils/Version.sol";
 import {NFTNameGenDropStorageV1} from "./storage/NFTNameGenDropStorageV1.sol";
 import {INFTNameGenMetadataRenderer} from "./interfaces/INFTNameGenMetadataRenderer.sol";
-import {LicenseVersion, CantBeEvilUpgradeable} from "./CantBeEvil.sol";
+import {LicenseVersion, CantBeEvilUpgradeable} from "./CantBeEvilUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/metatx/ERC2771ContextUpgradeable.sol";
 
 /**
