@@ -26,7 +26,7 @@ import {FundsReceiver} from "./utils/FundsReceiver.sol";
 import {Version} from "./utils/Version.sol";
 import {NFTNameGenDropStorageV1} from "./storage/NFTNameGenDropStorageV1.sol";
 import {INFTNameGenMetadataRenderer} from "./interfaces/INFTNameGenMetadataRenderer.sol";
-import {LicenseVersion, CantBeEvil} from "@a16z/contracts/licenses/CantBeEvil.sol";
+import {LicenseVersion, CantBeEvilUpgradeable} from "./CantBeEvil.sol";
 import "@openzeppelin/contracts-upgradeable/metatx/ERC2771ContextUpgradeable.sol";
 
 /**
@@ -48,7 +48,7 @@ contract NFTNameGenDrop is
     FundsReceiver,
     Version(8),
     NFTNameGenDropStorageV1,
-    CantBeEvil(LicenseVersion.COMMERCIAL)
+    CantBeEvilUpgradeable
 {
     /// @dev This is the max mint batch size for the optimized ERC721A mint contract
     uint256 internal constant MAX_MINT_BATCH_SIZE = 8;
@@ -197,7 +197,8 @@ contract NFTNameGenDrop is
         _setupRole(DEFAULT_ADMIN_ROLE, _initialOwner);
         // Set ownership to original sender of contract call
         _setOwner(_initialOwner);
-
+        // Set license to commercial
+        __CantBeEvil_init(LicenseVersion.CBE_NECR);
         if (config.royaltyBPS > MAX_ROYALTY_BPS) {
             revert Setup_RoyaltyPercentageTooHigh(MAX_ROYALTY_BPS);
         }
@@ -1043,9 +1044,9 @@ contract NFTNameGenDrop is
         public
         view
         override(
+            CantBeEvilUpgradeable,
             IERC165Upgradeable,
             ERC721AUpgradeable,
-            CantBeEvil,
             AccessControlUpgradeable
         )
         returns (bool)
