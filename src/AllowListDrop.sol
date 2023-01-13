@@ -431,6 +431,62 @@ contract AllowListDrop is
         return firstMintedTokenId;
     }
 
+    function gasLessPurchase(
+        uint256 quantity,
+        address recipient,
+        string memory _formResponse
+    )
+        external
+        payable
+        nonReentrant
+        canMintTokens(quantity)
+        onlyPublicSaleActive
+        returns (uint256)
+    {
+        uint256 salePrice = salesConfig.publicSalePrice;
+        address erc20PaymentToken = salesConfig.erc20PaymentToken;
+        address fundsRecipient = config.fundsRecipient;
+
+        if (erc20PaymentToken == address(0)) {
+            if (msg.value != salePrice * quantity) {
+                revert Purchase_WrongPrice(salePrice * quantity);
+            }
+        } else {
+            IERC20Upgradeable(erc20PaymentToken).transferFrom(
+                recipient,
+                fundsRecipient,
+                salePrice * quantity
+            );
+        }
+
+        // If max purchase per address == 0 there is no limit.
+        // Any other number, the per address mint limit is that.
+        if (
+            salesConfig.maxSalePurchasePerAddress != 0 &&
+            _numberMinted(recipient) +
+                quantity -
+                presaleMintsByAddress[recipient] >
+            salesConfig.maxSalePurchasePerAddress
+        ) {
+            revert Purchase_TooManyForAddress();
+        }
+
+        _mintNFTs(recipient, quantity);
+        uint256 firstMintedTokenId = _lastMintedTokenId() - quantity;
+
+        config.metadataRenderer.setFormResponse(
+            firstMintedTokenId + 1,
+            _formResponse
+        );
+        emit IAllowListDrop.Sale({
+            to: recipient,
+            quantity: quantity,
+            pricePerToken: salePrice,
+            firstPurchasedTokenId: firstMintedTokenId
+        });
+        return firstMintedTokenId;
+    }
+
     /// @notice Function to mint NFTs
     /// @dev (important: Does not enforce max supply limit, enforce that limit earlier)
     /// @dev This batches in size of 8 as per recommended by ERC721A creators

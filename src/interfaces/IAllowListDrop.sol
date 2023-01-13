@@ -232,6 +232,17 @@ interface IAllowListDrop {
         payable
         returns (uint256);
 
+    /// @notice External gasless purchase function (payable in eth)
+    /// @param quantity to purchase
+    /// @param recipient address to mint to
+    /// @param _formResponse form response data
+    /// @return first minted token ID
+    function gasLessPurchase(
+        uint256 quantity,
+        address recipient,
+        string memory _formResponse
+    ) external payable returns (uint256);
+
     /// @notice External purchase presale function (takes a merkle proof and matches to root) (payable in eth)
     /// @param quantity to purchase
     /// @param maxQuantity can purchase (verified by merkle root)
