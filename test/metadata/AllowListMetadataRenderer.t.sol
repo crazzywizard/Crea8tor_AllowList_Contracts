@@ -219,4 +219,30 @@ contract AllowListMetadataRendererTest is DSTest {
         vm.stopPrank();
         assertEq(formResponse, "formResponse");
     }
+
+    function test_UpdateMetadata() public {
+        IERC721OnChainDataMock mock = new IERC721OnChainDataMock({
+            totalMinted: 10,
+            maxSupply: type(uint64).max
+        });
+        vm.startPrank(address(mock));
+        bytes memory data = abi.encode(
+            "Description for metadata",
+            "https://example.com/image.png",
+            "https://example.com/animation.mp4"
+        );
+        allowListRenderer.initializeWithData(data);
+        uint256[] memory tokenId = new uint256[](100);
+        tokenId[0] = 1;
+        allowListRenderer.updateMetadata(address(mock), tokenId, "new image");
+        string memory imageUri = allowListRenderer.tokenImageURIs(
+            address(mock),
+            1
+        );
+        assertEq(imageUri, "new image");
+        assertEq(
+            allowListRenderer.tokenURI(1),
+            "data:application/json;base64,eyJuYW1lIjogIk1PQ0sgTkFNRSAxIiwgImRlc2NyaXB0aW9uIjogIkRlc2NyaXB0aW9uIGZvciBtZXRhZGF0YSA6ICIsICJpbWFnZSI6ICJuZXcgaW1hZ2UiLCAiYW5pbWF0aW9uX3VybCI6ICJodHRwczovL2V4YW1wbGUuY29tL2FuaW1hdGlvbi5tcDQiLCAicHJvcGVydGllcyI6IHsibnVtYmVyIjogMSwgIm5hbWUiOiAiTU9DSyBOQU1FIn19"
+        );
+    }
 }
