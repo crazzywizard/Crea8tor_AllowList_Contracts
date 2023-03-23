@@ -79,17 +79,26 @@ contract AllowListMetadataRenderer is
         });
     }
 
+    struct Applicant {
+        uint256 tokenID;
+        string imageUri;
+    }
+
     /// @notice Update metadata
     /// @param target targets for contract to update metadata for
-    /// @param tokenIDs token ids to update metadata for
-    /// @param imageURI new image uri address
+    /// @param tokenIds token ids to update metadata for
+    /// @param imageUris image uris to update metadata for
     function updateMetadata(
         address target,
-        uint256[] calldata tokenIDs,
-        string memory imageURI
+        uint256[] calldata tokenIds,
+        string[] calldata imageUris
     ) external requireSenderAdmin(target) {
-        for (uint256 i = 0; i < tokenIDs.length; i++) {
-            tokenImageURIs[target][tokenIDs[i]] = imageURI;
+        require(
+            imageUris.length == tokenIds.length,
+            "AllowListMetadataRenderer: imageUris and tokenIds must be same length"
+        );
+        for (uint256 i = 0; i < imageUris.length; i++) {
+            tokenImageURIs[target][tokenIds[i]] = imageUris[i];
         }
     }
 

@@ -8,6 +8,10 @@ import {DropMockBase} from "./DropMockBase.sol";
 import {IERC721Drop} from "../../src/interfaces/IERC721Drop.sol";
 import {DSTest} from "ds-test/test.sol";
 import {Vm} from "forge-std/Vm.sol";
+import {console} from "forge-std/console.sol";
+
+import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
+import {Base64} from "@openzeppelin/contracts/utils/Base64.sol";
 
 contract IERC721OnChainDataMock {
     IERC721Drop.ERC20SaleDetails private saleDetailsInternal;
@@ -55,6 +59,10 @@ contract IERC721OnChainDataMock {
 }
 
 contract AllowListMetadataRendererTest is DSTest {
+    struct Applicant {
+        uint256 tokenID;
+        string imageUri;
+    }
     Vm public constant vm = Vm(HEVM_ADDRESS);
     address public constant mediaContract = address(123456);
     AllowListMetadataRenderer public allowListRenderer =
@@ -231,10 +239,15 @@ contract AllowListMetadataRendererTest is DSTest {
             "https://example.com/image.png",
             "https://example.com/animation.mp4"
         );
+
         allowListRenderer.initializeWithData(data);
-        uint256[] memory tokenId = new uint256[](100);
-        tokenId[0] = 1;
-        allowListRenderer.updateMetadata(address(mock), tokenId, "new image");
+        string[] memory imageUris = new string[](2);
+        uint256[] memory tokenIds = new uint256[](2);
+        imageUris[0] = "new image";
+        tokenIds[0] = 1;
+        imageUris[1] = "new image 2";
+        tokenIds[1] = 2;
+        allowListRenderer.updateMetadata(address(mock), tokenIds, imageUris);
         string memory imageUri = allowListRenderer.tokenImageURIs(
             address(mock),
             1
