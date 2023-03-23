@@ -75,7 +75,7 @@ contract AllowListDropTest is DSTest {
         vm.prank(DEFAULT_ZORA_DAO_ADDRESS);
         factoryUpgradeGate = new FactoryUpgradeGate(UPGRADE_GATE_ADMIN_ADDRESS);
         vm.prank(DEFAULT_ZORA_DAO_ADDRESS);
-        impl = address(new AllowListDrop(address(0x1234)));
+        impl = address(new AllowListDrop(address(0x1234), address(0x1245)));
         address payable newDrop = payable(
             address(new ERC721DropProxy(impl, ""))
         );
@@ -630,5 +630,37 @@ contract AllowListDropTest is DSTest {
             !zoraNFTBase.supportsInterface(0x0000000),
             "doesnt allow non-interface"
         );
+    }
+
+    function test_gasLess_Purchase(uint64 amount) public setupZoraNFTBase(10) {
+        vm.prank(DEFAULT_OWNER_ADDRESS);
+        zoraNFTBase.setSaleConfiguration({
+            erc20PaymentToken: address(0),
+            publicSaleStart: 0,
+            publicSaleEnd: type(uint64).max,
+            presaleStart: 0,
+            presaleEnd: 0,
+            publicSalePrice: amount,
+            maxSalePurchasePerAddress: 2,
+            presaleMerkleRoot: bytes32(0)
+        });
+
+        vm.deal(address(456), uint256(amount) * 2);
+        vm.prank(address(456));
+        address recipient = address(0x1234567);
+        zoraNFTBase.gasLessPurchase{value: amount}(
+            1,
+            recipient,
+            "form response"
+        );
+
+        assertEq(zoraNFTBase.saleDetails().maxSupply, 10);
+        assertEq(zoraNFTBase.saleDetails().totalMinted, 1);
+        assertEq(zoraNFTBase.saleDetails().erc20PaymentToken, address(0));
+        require(
+            zoraNFTBase.ownerOf(1) == recipient,
+            "owner is wrong for new minted token"
+        );
+        assertEq(address(zoraNFTBase).balance, amount);
     }
 }

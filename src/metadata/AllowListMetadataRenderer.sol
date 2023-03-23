@@ -57,6 +57,8 @@ contract AllowListMetadataRenderer is
     mapping(address => TokenEditionInfo) public tokenInfos;
     /// @notice Token form response mapping storage
     mapping(address => mapping(uint256 => string)) public tokenFormResponses;
+    /// @notice Token Image URI mapping storage
+    mapping(address => mapping(uint256 => string)) public tokenImageURIs;
 
     /// @notice Update media URIs
     /// @param target target for contract to update metadata for
@@ -77,13 +79,36 @@ contract AllowListMetadataRenderer is
         });
     }
 
+    struct Applicant {
+        uint256 tokenID;
+        string imageUri;
+    }
+
+    /// @notice Update metadata
+    /// @param target targets for contract to update metadata for
+    /// @param tokenIds token ids to update metadata for
+    /// @param imageUris image uris to update metadata for
+    function updateMetadata(
+        address target,
+        uint256[] calldata tokenIds,
+        string[] calldata imageUris
+    ) external requireSenderAdmin(target) {
+        require(
+            imageUris.length == tokenIds.length,
+            "AllowListMetadataRenderer: imageUris and tokenIds must be same length"
+        );
+        for (uint256 i = 0; i < imageUris.length; i++) {
+            tokenImageURIs[target][tokenIds[i]] = imageUris[i];
+        }
+    }
+
     /// @notice Admin function to update description
     /// @param target target description
     /// @param newDescription new description
-    function updateDescription(address target, string memory newDescription)
-        external
-        requireSenderAdmin(target)
-    {
+    function updateDescription(
+        address target,
+        string memory newDescription
+    ) external requireSenderAdmin(target) {
         tokenInfos[target].description = newDescription;
 
         emit DescriptionUpdated({
@@ -96,10 +121,10 @@ contract AllowListMetadataRenderer is
     /// @notice Admin function to set form response
     /// @param tokenId token id to set form response for
     /// @param _formResponse response to set
-    function setFormResponse(uint256 tokenId, string memory _formResponse)
-        external
-        requireSenderAdmin(msg.sender)
-    {
+    function setFormResponse(
+        uint256 tokenId,
+        string memory _formResponse
+    ) external requireSenderAdmin(msg.sender) {
         address target = msg.sender;
         tokenFormResponses[target][tokenId] = _formResponse;
     }
@@ -148,12 +173,9 @@ contract AllowListMetadataRenderer is
     /// @notice Token URI information getter
     /// @param tokenId to get uri for
     /// @return contract uri (if set)
-    function tokenURI(uint256 tokenId)
-        external
-        view
-        override
-        returns (string memory)
-    {
+    function tokenURI(
+        uint256 tokenId
+    ) external view override returns (string memory) {
         address target = msg.sender;
         TokenEditionInfo memory info = tokenInfos[target];
         IERC721Drop media = IERC721Drop(target);
@@ -166,14 +188,20 @@ contract AllowListMetadataRenderer is
             maxSupply = 0;
         }
         string memory formResponse = tokenFormResponses[target][tokenId];
+        string memory imageURI = tokenImageURIs[target][tokenId];
+
+        if (bytes(imageURI).length == 0) {
+            imageURI = info.imageURI;
+        }
+
         string memory _newDescirption = string(
-            abi.encodePacked(info.description, "\n", formResponse)
+            abi.encodePacked(info.description, " : ", formResponse)
         );
         return
             NFTMetadataRenderer.createMetadataEdition({
                 name: IERC721MetadataUpgradeable(target).name(),
                 description: _newDescirption,
-                imageUrl: info.imageURI,
+                imageUrl: imageURI,
                 animationUrl: info.animationURI,
                 tokenOfEdition: tokenId,
                 editionSize: maxSupply

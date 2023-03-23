@@ -11,6 +11,7 @@ import {MockMetadataRenderer} from "./metadata/MockMetadataRenderer.sol";
 import {AllowListMetadataRenderer} from "../src/metadata/AllowListMetadataRenderer.sol";
 import {FactoryUpgradeGate} from "../src/FactoryUpgradeGate.sol";
 import {IERC721AUpgradeable} from "erc721a-upgradeable/IERC721AUpgradeable.sol";
+import {Decode} from "./utils/Decode.sol";
 
 contract ZoraNFTCreatorV1Test is DSTest {
     Vm public constant vm = Vm(HEVM_ADDRESS);
@@ -25,7 +26,7 @@ contract ZoraNFTCreatorV1Test is DSTest {
 
     function setUp() public {
         vm.prank(DEFAULT_ZORA_DAO_ADDRESS);
-        dropImpl = new AllowListDrop(address(1234));
+        dropImpl = new AllowListDrop(address(1234), address(2345));
         allowListMetadataRenderer = new AllowListMetadataRenderer();
         AllowListNFTCreatorV1 impl = new AllowListNFTCreatorV1(
             address(dropImpl),
@@ -124,10 +125,16 @@ contract ZoraNFTCreatorV1Test is DSTest {
             drop.contractURI(),
             "data:application/json;base64,eyJuYW1lIjogIm5hbWUiLCAiZGVzY3JpcHRpb24iOiAiRGVzY3JpcHRpb24gZm9yIG1ldGFkYXRhIiwgInNlbGxlcl9mZWVfYmFzaXNfcG9pbnRzIjogMTAwLCAiZmVlX3JlY2lwaWVudCI6ICIweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMjEzMDMiLCAiaW1hZ2UiOiAiaHR0cHM6Ly9leGFtcGxlLmNvbS9pbWFnZS5wbmcifQ=="
         );
+        vm.prank(address(0x8976));
         drop.purchase(1, "form response");
+        Decode decoded = new Decode();
+        string memory decoded_string = decoded.decode(drop.tokenURI(1));
+
+        console.log(decoded_string);
+        assertEq((IERC721AUpgradeable(drop).ownerOf(1)), address(0x8976));
         assertEq(
             drop.tokenURI(1),
-            "data:application/json;base64,eyJuYW1lIjogIm5hbWUgMS8xMDAwIiwgImRlc2NyaXB0aW9uIjogIkRlc2NyaXB0aW9uIGZvciBtZXRhZGF0YQpmb3JtIHJlc3BvbnNlIiwgImltYWdlIjogImh0dHBzOi8vZXhhbXBsZS5jb20vaW1hZ2UucG5nIiwgImFuaW1hdGlvbl91cmwiOiAiaHR0cHM6Ly9leGFtcGxlLmNvbS9hbmltYXRpb24ubXA0IiwgInByb3BlcnRpZXMiOiB7Im51bWJlciI6IDEsICJuYW1lIjogIm5hbWUifX0="
+            "data:application/json;base64,eyJuYW1lIjogIm5hbWUgMS8xMDAwIiwgImRlc2NyaXB0aW9uIjogIkRlc2NyaXB0aW9uIGZvciBtZXRhZGF0YSA6IGZvcm0gcmVzcG9uc2UiLCAiaW1hZ2UiOiAiaHR0cHM6Ly9leGFtcGxlLmNvbS9pbWFnZS5wbmciLCAiYW5pbWF0aW9uX3VybCI6ICJodHRwczovL2V4YW1wbGUuY29tL2FuaW1hdGlvbi5tcDQiLCAicHJvcGVydGllcyI6IHsibnVtYmVyIjogMSwgIm5hbWUiOiAibmFtZSJ9fQ=="
         );
     }
 }
